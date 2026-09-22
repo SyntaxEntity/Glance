@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Glance
+Name[zh_CN]=Glance 阅读器
+Comment=Markdown and LaTeX reader with a calm eye-care theme
+Comment[zh_CN]=低饱和护眼的 Markdown / LaTeX 阅读器
+Exec=glance %F
+Icon=text-x-markdown
+Terminal=false
+Type=Application
+Categories=Office;TextEditor;Viewer;
+MimeType=text/markdown;text/x-markdown;
+StartupNotify=true
+Keywords=markdown;latex;reader;notes;

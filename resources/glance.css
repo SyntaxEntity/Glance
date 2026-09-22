@@ -1,0 +1,169 @@
+/* Glance — low-saturation eye-care theme for GNOME / Adwaita */
+
+@define-color glance_bg #f4f0e6;
+@define-color glance_bg_soft #ebe6db;
+@define-color glance_bg_code #e7e2d6;
+@define-color glance_fg #3f3c35;
+@define-color glance_fg_muted #6f6a5e;
+@define-color glance_fg_faint #9a9486;
+@define-color glance_accent #6d8b74;
+@define-color glance_accent_soft #c5d4c8;
+@define-color glance_border #d9d3c4;
+@define-color glance_sidebar #e9e4d6;
+@define-color glance_hover #e0dacc;
+
+window {
+  background-color: @glance_bg;
+  color: @glance_fg;
+}
+
+headerbar {
+  background-color: @glance_bg_soft;
+  color: @glance_fg;
+  border-bottom: 1px solid @glance_border;
+}
+
+headerbar .title {
+  color: @glance_fg;
+  font-weight: 600;
+}
+
+.sidebar,
+.glance-sidebar {
+  background-color: @glance_sidebar;
+  border-right: 1px solid @glance_border;
+  color: @glance_fg;
+}
+
+.glance-sidebar list,
+.glance-sidebar listview {
+  background: transparent;
+}
+
+.glance-sidebar row {
+  border-radius: 8px;
+  margin: 1px 6px;
+  padding: 4px 8px;
+  min-height: 30px;
+}
+
+.glance-sidebar row:hover {
+  background-color: @glance_hover;
+}
+
+.glance-sidebar row:selected,
+.glance-sidebar row.activatable:selected {
+  background-color: @glance_accent_soft;
+  color: @glance_fg;
+}
+
+.glance-file-label {
+  color: @glance_fg;
+  font-size: 0.95em;
+}
+
+.glance-dir-label {
+  color: @glance_fg_muted;
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+.glance-outline-l1 { font-weight: 700; font-size: 1em; }
+.glance-outline-l2 { font-weight: 600; font-size: 0.95em; padding-left: 8px; }
+.glance-outline-l3 { font-weight: 500; font-size: 0.92em; padding-left: 18px; }
+.glance-outline-l4,
+.glance-outline-l5,
+.glance-outline-l6 {
+  font-weight: 400;
+  font-size: 0.9em;
+  padding-left: 28px;
+  color: @glance_fg_muted;
+}
+
+.glance-title-label {
+  font-weight: 600;
+  font-size: 1.05em;
+  color: @glance_fg;
+}
+
+.glance-sub-label {
+  font-size: 0.85em;
+  color: @glance_fg_muted;
+}
+
+.glance-editor {
+  background-color: @glance_bg;
+  color: @glance_fg;
+  font-family: "JetBrains Mono", "Sarasa Mono SC", "Source Code Pro", monospace;
+  font-size: 14px;
+}
+
+.glance-editor text {
+  background-color: @glance_bg;
+  color: @glance_fg;
+  caret-color: @glance_accent;
+}
+
+.glance-editor selection {
+  background-color: @glance_accent_soft;
+  color: @glance_fg;
+}
+
+.glance-editor gutter {
+  background-color: @glance_bg_soft;
+  color: @glance_fg_faint;
+  border-right: 1px solid @glance_border;
+}
+
+button {
+  border-radius: 8px;
+}
+
+button.flat {
+  background: transparent;
+  border: none;
+}
+
+button.flat:hover {
+  background-color: @glance_hover;
+}
+
+button.suggested-action {
+  background-color: @glance_accent;
+  color: #f7f5ef;
+}
+
+switch:checked {
+  background-color: @glance_accent;
+}
+
+separator {
+  background-color: @glance_border;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+.glance-pane-title {
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: @glance_fg_faint;
+  padding: 10px 12px 4px;
+}
+
+scrollbar slider {
+  background-color: @glance_border;
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: 8px;
+}
+
+scrollbar {
+  background: transparent;
+}
+
+.glance-empty {
+  color: @glance_fg_muted;
+  font-size: 0.95em;
+}
