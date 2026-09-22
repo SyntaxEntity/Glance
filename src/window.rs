@@ -102,6 +102,10 @@ fn open_window(app: &adw::Application, initial: Option<PathBuf>) {
     save_btn.set_visible(false);
     header.pack_end(&save_btn);
 
+    let export_btn = gtk::Button::from_icon_name("document-print-symbolic");
+    export_btn.set_tooltip_text(Some("导出 PDF"));
+    header.pack_end(&export_btn);
+
     let split = adw::OverlaySplitView::new();
     split.set_sidebar_position(gtk::PackType::Start);
     split.set_min_sidebar_width(200.0);
@@ -151,15 +155,22 @@ fn open_window(app: &adw::Application, initial: Option<PathBuf>) {
         state: state.clone(),
     });
 
-    if let Some(wd) = app_ui.state.cfg.borrow().workdir.clone() {
-        if wd.is_dir() {
-            app_ui.sidebar.set_workdir(Some(wd));
+    // Clone out of RefCell first — temporaries in `if let` live for the whole block.
+    {
+        let wd = app_ui.state.cfg.borrow().workdir.clone();
+        if let Some(wd) = wd {
+            if wd.is_dir() {
+                app_ui.sidebar.set_workdir(Some(wd));
+            }
         }
     }
 
     *app_ui.state.edit_mode.borrow_mut() = false;
     app_ui.content_stack.set_visible_child_name("preview");
-    split.set_show_sidebar(app_ui.state.cfg.borrow().sidebar_visible);
+    {
+        let visible = app_ui.state.cfg.borrow().sidebar_visible;
+        split.set_show_sidebar(visible);
+    }
 
     {
         let ui = Rc::clone(&app_ui);
@@ -254,6 +265,13 @@ fn open_window(app: &adw::Application, initial: Option<PathBuf>) {
 
     {
         let ui = Rc::clone(&app_ui);
+        export_btn.connect_clicked(move |_| {
+            ui.on_export_pdf();
+        });
+    }
+
+    {
+        let ui = Rc::clone(&app_ui);
         let key = gtk::EventControllerKey::new();
         key.connect_key_pressed(move |_, k, _c, mods| {
             if mods.contains(gtk::gdk::ModifierType::CONTROL_MASK)
@@ -267,11 +285,14 @@ fn open_window(app: &adw::Application, initial: Option<PathBuf>) {
         window.add_controller(key);
     }
 
+    let last_file = app_ui.state.cfg.borrow().last_file.clone();
     if let Some(path) = initial {
         app_ui.open_file(path);
-    } else if let Some(last) = app_ui.state.cfg.borrow().last_file.clone() {
+    } else if let Some(last) = last_file {
         if last.is_file() {
             app_ui.open_file(last);
+        } else {
+            app_ui.show_welcome();
         }
     } else {
         app_ui.show_welcome();
@@ -295,13 +316,13 @@ impl App {
     }
 
     fn persist_config(&self) {
-        {
+        let cfg = {
             let mut cfg = self.state.cfg.borrow_mut();
             cfg.edit_mode = *self.state.edit_mode.borrow();
             cfg.last_file = self.state.current_file.borrow().clone();
             cfg.sidebar_visible = self.sidebar_toggle.is_active();
-        }
-        let cfg = self.state.cfg.borrow().clone();
+            cfg.clone()
+        };
         crate::config::save(&cfg);
     }
 
@@ -391,7 +412,9 @@ $$
                     serde_json::to_string(&headings).unwrap_or_else(|_| "[]".into());
                 self.viewer.render_markdown(&text, &outline_json);
 
-                self.state.cfg.borrow_mut().last_file = Some(path);
+                {
+                    self.state.cfg.borrow_mut().last_file = Some(path);
+                }
                 self.persist_config();
                 self.sidebar.show_outline();
             }
@@ -409,10 +432,58 @@ $$
         let outline_json = serde_json::to_string(&headings).unwrap_or_else(|_| "[]".into());
         self.viewer.render_markdown(&text, &outline_json);
     }
+
+    fn on_export_pdf(self: &Rc<Self>) {
+        let Some(file) = self.state.current_file.borrow().clone() else {
+            self.toast("请先打开 Markdown 文件");
+            return;
+        };
+        let stem = file
+            .file_stem()
+            .map(|s| s.to_string_lossy().to_string())
+            .unwrap_or_else(|| "document".into());
+        let dialog = gtk::FileDialog::builder()
+            .title("导出 PDF")
+            .initial_name(format!("{stem}.pdf"))
+            .build();
+        let ui = Rc::clone(self);
+        dialog.save(
+            Some(&self.window),
+            gtk::gio::Cancellable::NONE,
+            move |res| {
+                if let Ok(dest) = res {
+                    let Some(path) = dest.path() else { return };
+                    if path.as_os_str().is_empty() {
+                        return;
+                    }
+                    let op = ui.viewer.prepare_export(&path);
+                    {
+                        let ui2 = Rc::clone(&ui);
+                        op.connect_failed(move |_, err| {
+                            ui2.viewer.clear_export();
+                            ui2.toast(&format!("导出失败: {err}"));
+                        });
+                    }
+                    {
+                        let ui2 = Rc::clone(&ui);
+                        let path2 = path.clone();
+                        op.connect_finished(move |_| {
+                            ui2.viewer.clear_export();
+                            ui2.toast(&format!("PDF 已导出: {}", path2.display()));
+                        });
+                    }
+                    ui.viewer.start_export(op);
+                    ui.toast("正在导出 PDF…");
+                }
+            },
+        );
+    }
 }
 
 fn css_path() -> String {
     let candidates = [
+        std::path::PathBuf::from("/usr/share/glance/glance.css"),
+        std::path::PathBuf::from("/usr/local/share/glance/glance.css"),
         std::path::PathBuf::from("resources/glance.css"),
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("resources/glance.css"),
     ];

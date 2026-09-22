@@ -1,6 +1,6 @@
 use gtk::prelude::*;
 use std::cell::RefCell;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::rc::Rc;
 use webkit6::prelude::*;
 
@@ -11,6 +11,7 @@ pub struct Viewer {
     last_md: RefCell<String>,
     last_outline: RefCell<String>,
     loaded: RefCell<bool>,
+    export_op: RefCell<Option<webkit6::PrintOperation>>,
 }
 
 impl Viewer {
@@ -43,6 +44,7 @@ impl Viewer {
             last_md: RefCell::new(String::new()),
             last_outline: RefCell::new("[]".into()),
             loaded: RefCell::new(false),
+            export_op: RefCell::new(None),
         });
 
         {
@@ -76,6 +78,29 @@ impl Viewer {
         let js =
             format!("if (typeof scrollToHeading === 'function') {{ scrollToHeading({id_json}); }}");
         self.eval_js(&js);
+    }
+
+    /// Build a print operation that writes PDF to `dest`. Caller connects
+    /// signals then calls `start_export` (so handlers are not missed).
+    pub fn prepare_export(&self, dest: &std::path::Path) -> webkit6::PrintOperation {
+        let uri = gtk::gio::File::for_path(dest).uri();
+        let settings = gtk::PrintSettings::new();
+        settings.set(gtk::PRINT_SETTINGS_OUTPUT_URI, Some(uri.as_str()));
+        settings.set(gtk::PRINT_SETTINGS_OUTPUT_FILE_FORMAT, Some("pdf"));
+        settings.set_printer("Print to File");
+        let op = webkit6::PrintOperation::new(&self.webview);
+        op.set_print_settings(&settings);
+        op
+    }
+
+    /// Start a prepared export and keep the operation alive until clear_export.
+    pub fn start_export(&self, op: webkit6::PrintOperation) {
+        *self.export_op.borrow_mut() = Some(op.clone());
+        op.print();
+    }
+
+    pub fn clear_export(&self) {
+        *self.export_op.borrow_mut() = None;
     }
 
     fn flush(&self) {
@@ -126,6 +151,11 @@ impl Viewer {
 fn resolve_preview_dir() -> PathBuf {
     let mut candidates: Vec<PathBuf> = Vec::new();
 
+    // System install (RPM / distro package)
+    candidates.push(PathBuf::from("/usr/share/glance/preview"));
+    candidates.push(PathBuf::from("/usr/local/share/glance/preview"));
+
+    // Relative to the binary (dev tree / cargo run)
     if let Ok(exe) = std::env::current_exe() {
         if let Some(dir) = exe.parent() {
             candidates.push(dir.join("resources/preview"));
@@ -135,7 +165,10 @@ fn resolve_preview_dir() -> PathBuf {
         }
     }
 
-    candidates.push(Path::new(env!("CARGO_MANIFEST_DIR")).join("resources/preview"));
+    // Compile-time project root (dev)
+    if let Ok(manifest) = std::env::var("CARGO_MANIFEST_DIR") {
+        candidates.push(PathBuf::from(manifest).join("resources/preview"));
+    }
     candidates.push(PathBuf::from("resources/preview"));
 
     for c in candidates {
