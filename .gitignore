@@ -2,3 +2,5 @@
 /vendor
 .mimocode/
 *.png
+.idea/
+packaging/rpmbuild/
