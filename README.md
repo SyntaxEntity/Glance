@@ -105,6 +105,16 @@ data/icons/      应用图标（hicolor：SVG + 多尺寸 PNG）
 - [ ] 自定义主题切换
 - [ ] 导出 PDF / HTML
 
+## Vibe Coding 说明
+
+本项目采用 **Vibe Coding**（AI 结对编程）方式开发：由人类给出需求与验收标准，AI 智能体完成代码编写、调试、打包与文档整理。
+
+- **开发工具**：[MiMoCode](https://mimo.xiaomi.com/mimocode)（小米 CLI 编程智能体）
+- **使用大模型**：`xiaomi/mimo-v2.6-pro`（MiMo v2.6 Pro）
+- **协作方式**：自然语言描述功能与缺陷 → AI 实现并自检（`cargo check` / 打包验证）→ 人工审阅与提交
+
+请以审阅辅助代码的心态使用本仓库：关键逻辑（Markdown / LaTeX 渲染、文件树、大纲）仍建议人工复核后再用于生产环境。
+
 ## 许可证
 
 MIT — 详见 [LICENSE](LICENSE)。
