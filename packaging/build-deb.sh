@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
-# Build glance DEB from the release binary (no extra build system).
-# Produces packaging/deb/glance_<version>_amd64.deb
+# Build glance DEB from a release binary.
+# Usage: build-deb.sh [ARCH] [BINARY]
+#   ARCH   — Debian arch (amd64 | arm64), default amd64
+#   BINARY — path to prebuilt glance, default target/release/glance
+# Produces packaging/deb/glance_<version>-1_<arch>.deb
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VERSION="$(sed -n 's/^version = "\(.*\)"/\1/p' "$ROOT/Cargo.toml" | head -1)"
 NAME=glance
-ARCH=amd64
+ARCH="${1:-amd64}"
+BIN="${2:-$ROOT/target/release/glance}"
 DEB_VER="${VERSION}-1"
 OUT_DIR="$ROOT/packaging/deb"
 STAGE="$OUT_DIR/${NAME}_${DEB_VER}_${ARCH}"
 DEB_FILE="$OUT_DIR/${NAME}_${DEB_VER}_${ARCH}.deb"
-BIN="$ROOT/target/release/glance"
 
 if [[ ! -x "$BIN" ]]; then
   echo "==> Building release binary"
