@@ -5,3 +5,4 @@
 !data/icons/**/*.png
 .idea/
 packaging/rpmbuild/
+packaging/deb/

@@ -13,7 +13,7 @@ Version:        0.1.2
 Release:        1%{?dist}
 Summary:        Calm Markdown and LaTeX reader for GNOME
 License:        MIT
-URL:            https://gitcode.com/Esperanta/Glance
+URL:            https://github.com/SyntaxEntity/Glance
 Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  rust
