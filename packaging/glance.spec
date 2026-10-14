@@ -9,7 +9,7 @@
 #     glib2-devel cairo-devel pango-devel gdk-pixbuf2-devel graphene-devel
 
 Name:           glance
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        Calm Markdown and LaTeX reader for GNOME
 License:        MIT
@@ -82,5 +82,9 @@ install -Dpm 0644 THIRD_PARTY.md %{buildroot}%{_docdir}/%{name}/THIRD_PARTY.md
 %{_datadir}/icons/hicolor/*/apps/glance.png
 
 %changelog
+* Tue Oct 14 2026 Esperanta <esperanta@users.noreply.gitcode.com> - 0.1.1-1
+- Add hicolor application icon (SVG + multi-size PNG)
+- Use custom icon in desktop entry and window
+
 * Wed Sep 23 2026 Esperanta <esperanta@users.noreply.gitcode.com> - 0.1.0-1
 - Initial RPM release
