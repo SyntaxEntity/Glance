@@ -62,6 +62,13 @@ install -Dpm 0644 resources/preview/fonts/* \
 install -Dpm 0644 data/glance.desktop \
     %{buildroot}%{_datadir}/applications/glance.desktop
 
+install -Dpm 0644 data/icons/hicolor/scalable/apps/glance.svg \
+    %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/glance.svg
+for size in 16 24 32 48 64 128 256 512; do
+    install -Dpm 0644 data/icons/hicolor/${size}x${size}/apps/glance.png \
+        %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/glance.png
+done
+
 install -Dpm 0644 README.md %{buildroot}%{_docdir}/%{name}/README.md
 install -Dpm 0644 THIRD_PARTY.md %{buildroot}%{_docdir}/%{name}/THIRD_PARTY.md
 
@@ -71,6 +78,8 @@ install -Dpm 0644 THIRD_PARTY.md %{buildroot}%{_docdir}/%{name}/THIRD_PARTY.md
 %{_bindir}/glance
 %{_datadir}/glance/
 %{_datadir}/applications/glance.desktop
+%{_datadir}/icons/hicolor/scalable/apps/glance.svg
+%{_datadir}/icons/hicolor/*/apps/glance.png
 
 %changelog
 * Wed Sep 23 2026 Esperanta <esperanta@users.noreply.gitcode.com> - 0.1.0-1

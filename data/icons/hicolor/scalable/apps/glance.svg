@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 60 1134 1134" width="1254" height="1254">
+  <!-- Glance: calm Markdown + LaTeX reader -->
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3A6BAF"/>
+      <stop offset="1" stop-color="#3D6CB2"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C5D1E8"/>
+      <stop offset="1" stop-color="#B9C6E1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- rounded app tile -->
+  <rect x="100" y="100" width="1054" height="1054" rx="230" ry="230" fill="url(#tile)"/>
+
+  <!-- document page with dog-ear cut at top-right -->
+  <path d="M379 278 H757 L919 445 V910 A70 70 0 0 1 849 980 H379 A70 70 0 0 1 309 910 V348 A70 70 0 0 1 379 278 Z"
+        fill="#F8F8F8"/>
+
+  <!-- dog-ear fold flap -->
+  <path d="M757 278 L919 445 H757 Z" fill="url(#fold)"/>
+
+  <!-- text lines -->
+  <rect x="382" y="435" width="339" height="49" rx="24.5" fill="#6E8DBC"/>
+  <rect x="382" y="536" width="268" height="49" rx="24.5" fill="#6E8DBC"/>
+  <rect x="382" y="635" width="188" height="48" rx="24" fill="#6E8DBC"/>
+
+  <!-- eye / preview mark: sharp almond (two circular arcs) -->
+  <!-- white halo so the tip reads against the blue tile -->
+  <path d="M575 796 A218 218 0 0 1 975 796 A218 218 0 0 1 575 796 Z"
+        fill="#FFFFFF" stroke="#FFFFFF" stroke-width="22" stroke-linejoin="round"/>
+  <path d="M575 796 A218 218 0 0 1 975 796 A218 218 0 0 1 575 796 Z"
+        fill="#3D6CB2"/>
+  <circle cx="775" cy="796" r="72" fill="#F8F8F8"/>
+</svg>

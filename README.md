@@ -84,6 +84,7 @@ resources/
   preview/       WebView 模板（marked.js + KaTeX）
 docs/            示例笔记
 data/glance.desktop
+data/icons/      应用图标（hicolor：SVG + 多尺寸 PNG）
 ```
 
 ## 技术栈

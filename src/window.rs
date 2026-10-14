@@ -48,6 +48,7 @@ fn open_window(app: &adw::Application, initial: Option<PathBuf>) {
         .width_request(880)
         .height_request(520)
         .build();
+    window.set_icon_name(Some("glance"));
 
     let provider = gtk::CssProvider::new();
     provider.load_from_path(css_path());
