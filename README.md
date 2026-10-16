@@ -5,6 +5,9 @@
 ![GTK4](https://img.shields.io/badge/GTK-4.22-3d3846?logo=gnome&logoColor=white)
 ![Rust](https://img.shields.io/badge/Rust-2021-3d3846?logo=rust&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-6d8b74)
+![DeepSeek Assisted Development](https://img.shields.io/badge/DeepSeek%20Assisted-Development-brightgreen?style=for-the-badge&logo=deepseek)
+
+📖 **文档**：[PROJECT.md](PROJECT.md) 项目现状与架构 · [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) 构建·打包·发布
 
 ## 功能
 
@@ -103,17 +106,24 @@ data/icons/      应用图标（hicolor：SVG + 多尺寸 PNG）
 - [ ] 多标签页
 - [ ] 全文搜索
 - [ ] 自定义主题切换
-- [ ] 导出 PDF / HTML
+- [x] 导出 PDF（右上角打印按钮）
+- [ ] 导出 HTML
 
-## Vibe Coding 说明
+## DeepSeek Assisted Development
 
-本项目采用 **Vibe Coding**（AI 结对编程）方式开发：由人类给出需求与验收标准，AI 智能体完成代码编写、调试、打包与文档整理。
+![DeepSeek Assisted Development](https://img.shields.io/badge/DeepSeek%20Assisted-Development-brightgreen?style=for-the-badge&logo=deepseek)
 
-- **开发工具**：[MiMoCode](https://mimo.xiaomi.com/mimocode)（小米 CLI 编程智能体）
-- **使用大模型**：`xiaomi/mimo-v2.6-pro`（MiMo v2.6 Pro）
-- **协作方式**：自然语言描述功能与缺陷 → AI 实现并自检（`cargo check` / 打包验证）→ 人工审阅与提交
+本仓库代码由 **DeepSeek** 辅助编写（vibecoding）。AI 生成的代码可能包含缺陷、过时用法或不完整实现，
+请自行评估后使用与集成。
 
-请以审阅辅助代码的心态使用本仓库：关键逻辑（Markdown / LaTeX 渲染、文件树、大纲）仍建议人工复核后再用于生产环境。
+### 开发方式
+
+本项目采用 **Vibe Coding**（AI 结对编程）：人类给出需求与验收标准，AI agent 完成代码编写、调试、打包与文档整理。
+
+- **开发工具**：DeepSeek Harness（当前维护）· [MiMoCode](https://mimo.xiaomi.com/mimocode)（v0.1.x 阶段）
+- **协作方式**：自然语言描述需求与缺陷 → AI 实现并自检（`cargo check` / `cargo test` / 打包验证）→ 人工审阅与提交
+
+关键逻辑（Markdown / LaTeX 渲染、文件树、大纲）仍建议人工复核后再用于生产环境。
 
 ## 许可证
 
