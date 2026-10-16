@@ -193,6 +193,12 @@ fn open_window(app: &adw::Application, initial: Option<PathBuf>) {
             ui.persist_config();
         });
     }
+    {
+        let ui = Rc::clone(&app_ui);
+        editor.set_on_save_error(move |msg| {
+            ui.toast(msg);
+        });
+    }
 
     {
         let ui = Rc::clone(&app_ui);
@@ -388,6 +394,9 @@ $$
         self.sidebar.set_outline(&headings);
         let outline_json = serde_json::to_string(&headings).unwrap_or_else(|_| "[]".into());
         self.viewer.render_markdown(welcome, &outline_json);
+        // Mirror the welcome page into the editor so switching to edit mode
+        // shows something. No file is bound, so saving reports an error.
+        self.editor.set_text(welcome);
         self.sidebar.show_outline();
         self.content_stack.set_visible_child_name("preview");
     }
