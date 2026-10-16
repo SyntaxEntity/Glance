@@ -59,7 +59,7 @@ Version: ${DEB_VER}
 Section: utils
 Priority: optional
 Architecture: ${ARCH}
-Maintainer: Esperanta <esperanta@users.noreply.github.com>
+Maintainer: SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com>
 Homepage: https://github.com/SyntaxEntity/Glance
 Depends: libc6, libglib2.0-0, libgtk-4-1, libadwaita-1-0, libwebkitgtk-6.0-4, libgtksourceview-5-0
 Recommends: hicolor-icon-theme
@@ -120,7 +120,9 @@ fakeroot dpkg-deb --build --root-owner-group "$STAGE" "$DEB_FILE"
 
 echo "==> Verifying"
 dpkg-deb --info "$DEB_FILE"
-dpkg-deb --contents "$DEB_FILE" | head -40
+# NB: not `| head -40` — closing the pipe early trips `set -o pipefail` with
+# SIGPIPE from the tar subprocess, failing the build after the .deb was written.
+dpkg-deb --contents "$DEB_FILE" | sed -n '1,40p'
 
 echo "==> Artifact"
 echo "$DEB_FILE"

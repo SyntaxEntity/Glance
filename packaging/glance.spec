@@ -82,13 +82,13 @@ install -Dpm 0644 THIRD_PARTY.md %{buildroot}%{_docdir}/%{name}/THIRD_PARTY.md
 %{_datadir}/icons/hicolor/*/apps/glance.png
 
 %changelog
-* Tue Oct 14 2026 Esperanta <esperanta@users.noreply.gitcode.com> - 0.1.2-1
+* Wed Oct 14 2026 SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com> - 0.1.2-1
 - Fill document shape in icon (was transparent)
 - Retint icon to low-saturation eye-care palette
 
-* Tue Oct 14 2026 Esperanta <esperanta@users.noreply.gitcode.com> - 0.1.1-1
+* Wed Oct 14 2026 SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com> - 0.1.1-1
 - Add hicolor application icon (SVG + multi-size PNG)
 - Use custom icon in desktop entry and window
 
-* Wed Sep 23 2026 Esperanta <esperanta@users.noreply.gitcode.com> - 0.1.0-1
+* Wed Sep 23 2026 SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com> - 0.1.0-1
 - Initial RPM release
