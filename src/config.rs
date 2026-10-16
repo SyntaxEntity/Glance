@@ -48,8 +48,8 @@ mod tests {
     #[test]
     fn round_trips_through_json() {
         let cfg = Config {
-            workdir: Some(PathBuf::from("/home/u/notes")),
-            last_file: Some(PathBuf::from("/home/u/notes/readme.md")),
+            workdir: Some(PathBuf::from("/home/user/notes")),
+            last_file: Some(PathBuf::from("/home/user/notes/readme.md")),
             edit_mode: true,
             sidebar_visible: false,
         };

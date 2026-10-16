@@ -11,7 +11,7 @@
 
 | 项 | 值 |
 |---|---|
-| 分支 / 远端 | `master` ← `git@github.com:SyntaxEntity/Glance.git`（SSH，**2026-10-17 由 `ssh://…:443` 改回**） |
+| 分支 / 远端 | `master` ← SSH `git@<host>:<owner>/<repo>.git`（**2026-10-17 由 `ssh://…:443` 改回**） |
 | 版本 | `0.1.2`，`Cargo.toml` 与 `packaging/glance.spec` 两处须一致 |
 | 技术栈 | gtk4-rs 0.11 (`v4_22`) · libadwaita 0.9 · webkit6 0.6 · sourceview5 0.11 · serde |
 | 渲染链 | Markdown → Rust 侧解析大纲 → JS 注入 → WebView 内 marked.js → KaTeX（**完全离线**，字体本地打包） |
