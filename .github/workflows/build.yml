@@ -1,0 +1,124 @@
+name: build
+
+# 触发方式：
+#   - 推送 v* tag 时构建四个发行包并挂到对应 Release
+#   - 手动 workflow_dispatch 只构建、不上传 Release（便于验证环境）
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write        # 挂 Release 需要写权限；不涉及任何 secret
+
+jobs:
+  test:
+    name: test (x86_64)
+    runs-on: ubuntu-24.04
+    # 依赖 GTK 4.22 / libadwaita 1.9 / WebKitGTK 6.0 / GtkSourceView 5.18，
+    # Ubuntu 镜像自带的版本过旧，必须在 Fedora 44 容器内构建。
+    container: registry.fedoraproject.org/fedora:44
+    steps:
+      - name: Prepare container
+        run: dnf install -y --setopt=install_weak_deps=False git ca-certificates
+
+      - uses: actions/checkout@v4
+
+      - name: Install test dependencies
+        run: |
+          dnf install -y --setopt=install_weak_deps=False \
+            gcc make rust cargo \
+            gtk4-devel libadwaita-devel webkitgtk6.0-devel gtksourceview5-devel \
+            glib2-devel cairo-devel pango-devel gdk-pixbuf2-devel graphene-devel \
+            pkgconf-pkg-config xorg-x11-server-Xvfb
+
+      - name: cargo test
+        # 两个编辑器测试需要 GTK 显示，用 Xvfb 提供无头 X11
+        run: xvfb-run -a cargo test --locked
+
+  packages:
+    name: packages (${{ matrix.arch }})
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+            deb_arch: amd64
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+            deb_arch: arm64
+    runs-on: ${{ matrix.runner }}
+    container: registry.fedoraproject.org/fedora:44
+    steps:
+      - name: Prepare container
+        run: dnf install -y --setopt=install_weak_deps=False git ca-certificates
+
+      - uses: actions/checkout@v4
+
+      - name: Verify tag matches Cargo.toml
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          v=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)
+          if [ "v$v" != "${GITHUB_REF#refs/tags/}" ]; then
+            echo "tag 与 Cargo.toml 版本不一致：tag=${GITHUB_REF#refs/tags/}，Cargo.toml=$v" >&2
+            exit 1
+          fi
+
+      - name: Install packaging dependencies
+        run: |
+          dnf install -y --setopt=install_weak_deps=False \
+            rpm-build rpmdevtools gcc make rust cargo \
+            gtk4-devel libadwaita-devel webkitgtk6.0-devel gtksourceview5-devel \
+            glib2-devel cairo-devel pango-devel gdk-pixbuf2-devel graphene-devel \
+            pkgconf-pkg-config tar gzip findutils which \
+            dpkg dpkg-dev fakeroot
+
+      - name: Build release binary
+        run: cargo build --release --locked
+
+      - name: Build RPM
+        run: ./packaging/build-rpm.sh
+
+      - name: Build DEB
+        run: ./packaging/build-deb.sh ${{ matrix.deb_arch }} target/release/glance
+
+      - name: Show artifacts
+        run: |
+          find packaging/rpmbuild/RPMS packaging/deb -name '*.rpm' -o -name '*.deb' | sort
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ matrix.arch }}
+          # 只传最终发行包；debuginfo / debugsource 不进 Release
+          # （v0.1.1 / v0.1.2 的 Release 一直只有 4 个包，保持一致）
+          path: |
+            packaging/rpmbuild/RPMS/**/*.rpm
+            packaging/deb/*.deb
+            !packaging/rpmbuild/RPMS/**/glance-debug*.rpm
+          if-no-files-found: error
+
+  release:
+    name: publish release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: packages
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: List artifacts
+        run: ls -lh dist
+
+      - name: Upload to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1 || \
+            gh release create "${GITHUB_REF_NAME}" \
+              --title "${GITHUB_REF_NAME}" \
+              --notes "Release ${GITHUB_REF_NAME}"
+          gh release upload "${GITHUB_REF_NAME}" dist/* --clobber
