@@ -14,7 +14,7 @@
 | 项 | 值 |
 |------|------|
 | 仓库 | https://github.com/SyntaxEntity/Glance（public） |
-| 远程 URL | SSH：`git@<host>:<owner>/<repo>.git`（原 `ssh://…:443` 形式已于 2026-10-17 弃用） |
+| 远程 URL | `git@github.com:SyntaxEntity/Glance.git`（SSH；原 `ssh://…:443` 形式已于 2026-10-17 弃用） |
 | 当前版本 | `0.1.2` |
 | 分支 | `master` |
 | 语言 / 工具链 | Rust 2021 |

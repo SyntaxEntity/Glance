@@ -57,7 +57,7 @@ sudo apt install ./glance_0.1.2-1_amd64.deb
 | 右上角铅笔 | 切换编辑 / 预览（默认预览） |
 | 右上角打印 | 导出 PDF |
 
-工作目录、上次打开的文件等状态保存在 `~/.config/glance/config.json`，无需手工编辑。
+工作目录、上次打开的文件等状态保存在 `$XDG_CONFIG_HOME/glance/config.json`（未设置 `XDG_CONFIG_HOME` 时为 `~/.config/glance/config.json`），无需手工编辑。
 
 ### LaTeX 示例
 

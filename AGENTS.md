@@ -3,6 +3,10 @@
 > 项目根 = 仓库根 = `~/Projects/Glance`。
 > **工作区统一规范（红线）见 `~/Projects/Atlas/prompts/PROMPT-00-workspace-norms.md` 与 `~/Projects/Atlas/CONVENTIONS.md`，本文件只补项目特有的部分。**
 
+> **⚠️ 每轮开工先读 `~/Projects/Atlas/brief.md`** —— 那是 Atlas 的当前轮次派发单，
+> 读完这一个文件就知道本轮该做什么、不该做什么。没有你的任务就回报「无新增任务」，
+> **不要自行找活干**。派发单里的任务**幂等**：已完成就核对并跳过，不要重做。
+
 ---
 
 ## 0. 30 秒认知
@@ -11,7 +15,7 @@
 
 | 项 | 值 |
 |---|---|
-| 分支 / 远端 | `master` ← SSH `git@<host>:<owner>/<repo>.git`（**2026-10-17 由 `ssh://…:443` 改回**） |
+| 分支 / 远端 | `master` ← `git@github.com:SyntaxEntity/Glance.git`（SSH，**2026-10-17 由 `ssh://…:443` 改回**） |
 | 版本 | `0.1.2`，`Cargo.toml` 与 `packaging/glance.spec` 两处须一致 |
 | 技术栈 | gtk4-rs 0.11 (`v4_22`) · libadwaita 0.9 · webkit6 0.6 · sourceview5 0.11 · serde |
 | 渲染链 | Markdown → Rust 侧解析大纲 → JS 注入 → WebView 内 marked.js → KaTeX（**完全离线**，字体本地打包） |
