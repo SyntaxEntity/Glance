@@ -41,13 +41,16 @@
 
 ### 1.2 maintainer 身份在**文件内容**里已统一 ✅（2026-10-17）
 
-原 `Esperanta <esperanta@…>` 陈旧身份已从当前树清除，全部统一为 `SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com>`：
+原 `Esperanta` 笔名（**GitCode 侧的旧账号，同一所有者**）已全部更名为 `SyntaxEntity`。
+**2026-10-17 起统一迁移到 GitHub；GitCode 相关身份、密钥与配置全部弃用并清除。**
 
 | 位置 | 状态 |
 |---|---|
+| git 提交身份（全历史） | ✅ 已由 Atlas 改写 |
 | `packaging/glance.spec` `%changelog`（3 处） | ✅ 已改 |
 | `packaging/build-deb.sh` `Maintainer:` | ✅ 已改 |
-| git 提交身份 | ✅ 已由 Atlas 统一 |
+| **`LICENSE` 版权行** | ✅ 已改 → `Copyright (c) 2026 SyntaxEntity` |
+| **`packaging/build-deb.sh` `Copyright:` 行** | ✅ 已改 |
 
 > 自测：`grep -rn "esperanta" packaging/ \| wc -l` → `0`（构建产物已随之重新生成）。
 

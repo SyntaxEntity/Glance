@@ -76,7 +76,7 @@ Upstream-Name: glance
 Source: https://github.com/SyntaxEntity/Glance
 
 Files: *
-Copyright: 2026 Esperanta
+Copyright: 2026 SyntaxEntity
 License: MIT
  Permission is hereby granted, free of charge, to any person obtaining a
  copy of this software and associated documentation files (the "Software"),
