@@ -1,8 +1,8 @@
 # Glance
 
-![GTK4](https://img.shields.io/badge/GTK-4-3d3846?logo=gnome&logoColor=white)
-![Rust](https://img.shields.io/badge/Rust-2021-3d3846?logo=rust&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-6d8b74)
+![Rust](https://img.shields.io/badge/Rust-1.92%2B-blue?style=for-the-badge&logo=rust)
+![GTK](https://img.shields.io/badge/GTK-4-blue?style=for-the-badge&logo=gnome)
+![license](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 ![DeepSeek Assisted Development](https://img.shields.io/badge/DeepSeek%20Assisted-Development-brightgreen?style=for-the-badge&logo=deepseek)
 
 低饱和护眼的 **Markdown + LaTeX** 阅读器，面向 GNOME / Linux 桌面的长文阅读场景。公式字体本地打包，完全离线；默认只读预览，需要时才进入编辑。
