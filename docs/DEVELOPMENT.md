@@ -117,7 +117,7 @@ gh release upload v0.1.x <packages...> --clobber
 2. **推送邮箱隐私保护**：author **和** committer 必须是 `SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com>`，否则 GH007 拒绝推送。
 3. **依赖版本偏新**：Debian / Ubuntu 稳定版可能不满足 GTK 4.22 / libadwaita 1.9 / WebKitGTK 6.0 / GtkSourceView 5.18。DEB 的 `Depends` 按 Debian sid / Ubuntu 25.04+ 的包名写。
 4. **打包产物均已在 `.gitignore`**：`packaging/rpmbuild/`、`packaging/deb/`、`packaging/arm-rpm/`。发布用的二进制**不进仓库**，只挂 release。
-5. **无 CI**：`.github/` 不存在，四包全靠本机脚本。若要补 CI，ARM 用 GitHub 官方 `ubuntu-24.04-arm` runner 可彻底免掉 qemu 的 25 分钟流程。
+5. **CI 已就绪**：`.github/workflows/build.yml` —— tag `v*` 触发，x86_64 与 aarch64 各自在 Fedora 44 容器内构建四包并挂 Release。aarch64 用原生 `ubuntu-24.04-arm` runner，**无需 qemu**；本机 `build-rpm-arm.sh` 保留作为离线兜底。普通提交与 PR 不触发测试。
 6. **maintainer 身份已统一**：全部使用 `SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com>`，与 git 提交身份一致。
    - `packaging/glance.spec` 的 `%changelog`、`packaging/build-deb.sh` 生成的 `DEBIAN/control` 的 `Maintainer` 字段
    - 早期的 `Esperanta <esperanta@…>` 身份已清除（git 历史由 Atlas 改写，当前树由本项目清理）

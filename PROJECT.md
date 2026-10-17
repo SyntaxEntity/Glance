@@ -47,7 +47,7 @@ src/
   main.rs      30   入口，adw::Application（HANDLES_OPEN）
   window.rs   506   主窗口 / HeaderBar / 交互 / PDF 导出 —— 最大模块
   sidebar.rs  340   文件树 + 大纲，Stack 切换
-  editor.rs   234   GtkSourceView 编辑器 + 保存回执 + 单元测试
+  editor.rs   235   GtkSourceView 编辑器 + 保存回执 + 单元测试
   outline.rs  204   标题 → 大纲解析 + 单元测试
   viewer.rs   181   WebKitGTK 预览与 JS 桥
   config.rs    90   配置持久化 + 单元测试
@@ -174,5 +174,5 @@ GDK_BACKEND=broadway BROADWAY_DISPLAY=:5 cargo test
 - **远程操作可能失败**：本机 `git` 走 SSH 当前不可用（`/etc/ssh/ssh_config.d/` 属主为 `nobody:nobody`，需 root 修复）。**不要自行发明绕行方案**，按工作区规范上报。（2026-10-17 实测）
 - **版本号三处同步**：`Cargo.toml`、`packaging/glance.spec`（`Version` + `%changelog`）、DEB 版本由脚本从 `Cargo.toml` 读取。`%changelog` 的**星期几必须与日期自洽**，否则 rpmbuild 告警。
 - **提交身份**：author **与** committer 都必须是 `SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com>`，否则推送被 GH007 拒绝（`git config user.email` 已配好）。
-- **无 CI**：`.github/` 不存在，四包目前靠本机脚本产出。
+- **CI**：`.github/workflows/build.yml` 在推送 `v*` tag 时于 Fedora 44 容器内构建四包并挂 Release；aarch64 走原生 `ubuntu-24.04-arm` runner（不再需要 qemu）。普通提交与 PR 不触发。
 - **构建中间物**均在 `.gitignore` 内：`packaging/rpmbuild/`、`packaging/deb/`、`packaging/arm-rpm/`。

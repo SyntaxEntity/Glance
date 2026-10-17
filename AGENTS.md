@@ -51,16 +51,20 @@
 
 > 自测：`grep -rn "esperanta" packaging/ \| wc -l` → `0`（构建产物已随之重新生成）。
 
-### 1.3 仓库元信息
+### 1.3 仓库元信息 ✅ 已更新（2026-10-17）
 
-- description 仍带 `[Vibe]` 前缀 → 按规范 §4.4 去掉。
-- 无 topics、无 homepage、README 无截图。
-- `master` 无分支保护。
+- description ✅ 已去掉 `[Vibe]` 前缀，改为按 §4.4 模板的一句话定位
+- topics ✅ 已补 12 个（markdown / latex / katex / gtk4 / libadwaita / rust / gnome / linux / desktop-app / webkitgtk / markdown-reader / reader）
+- homepage：**留空**（本项目无独立网站，不编造）
+- `master` 仍**无分支保护** —— 若要开启需先经 Atlas 授权
 
-### 1.4 无 CI（D4）
+### 1.4 CI ✅ 已就绪（2026-10-17）
 
-`.github/` 不存在，四包靠本机脚本（aarch64 走 qemu 约 25 分钟）。
-**前置阻塞**：`gh` token 缺 `workflow` scope → 无法经 API 推送 workflow 文件，需用户扩 scope 或改走 SSH push。
+`.github/workflows/build.yml`：tag `v*` 触发，x86_64 与 aarch64 各自在 Fedora 44 容器内构建四包并挂 Release；aarch64 用原生 `ubuntu-24.04-arm` runner（不再需要 qemu）。手动验证用 `gh workflow run build.yml`。
+
+实测记录（run `39008822441`）：**4 个 job 全绿，总耗时 7.1 分钟**，产物为 4 个发行包且不含 debuginfo。
+
+**「token 缺 `workflow` scope」不是阻塞**：scope 只约束 token/OAuth 通道，SSH 推送 workflow 文件已实测成功。
 
 ---
 
