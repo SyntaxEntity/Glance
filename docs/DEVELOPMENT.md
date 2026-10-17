@@ -121,7 +121,7 @@ gh release upload v0.1.x <packages...> --clobber
 6. **maintainer 身份已统一**：全部使用 `SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com>`，与 git 提交身份一致。
    - `packaging/glance.spec` 的 `%changelog`、`packaging/build-deb.sh` 生成的 `DEBIAN/control` 的 `Maintainer` 字段
    - `LICENSE` 与 `packaging/build-deb.sh` 的 `Copyright:` 行（2026-10-17 由 Atlas 统一）
-   - 早期的 `Esperanta` 笔名（**原 GitCode 侧账号**）已全部更名为 `SyntaxEntity`：
+   - 早期的 `Esperanta` 笔名（**同一所有者的旧账号**）已全部更名为 `SyntaxEntity`：
      git 历史由 Atlas 改写；当前树含 `LICENSE` / `packaging/*` 一并清理
 
 ---
