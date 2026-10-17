@@ -72,7 +72,7 @@ jobs:
             rpm-build rpmdevtools gcc make rust cargo \
             gtk4-devel libadwaita-devel webkitgtk6.0-devel gtksourceview5-devel \
             glib2-devel cairo-devel pango-devel gdk-pixbuf2-devel graphene-devel \
-            pkgconf-pkg-config tar gzip findutils which \
+            pkgconf-pkg-config rsync tar gzip findutils which \
             dpkg dpkg-dev fakeroot
 
       - name: Build release binary
