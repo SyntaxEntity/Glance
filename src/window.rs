@@ -73,7 +73,9 @@ fn open_window(app: &adw::Application, initial: Option<PathBuf>) {
     open_dir_btn.set_tooltip_text(Some("设置工作目录"));
     header.pack_start(&open_dir_btn);
 
-    let open_file_btn = gtk::Button::from_icon_name("document-open-symbolic");
+    // 注意：Adwaita 中 document-open-symbolic 与 folder-open-symbolic 是同一份 SVG，
+    // 两个按钮会渲染成一模一样。这里改用文件类图标，与「设置工作目录」区分开。
+    let open_file_btn = gtk::Button::from_icon_name("text-x-generic-symbolic");
     open_file_btn.set_tooltip_text(Some("打开 Markdown 文件"));
     header.pack_start(&open_file_btn);
 

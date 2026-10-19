@@ -258,7 +258,8 @@ impl Sidebar {
             arrow.set_opacity(0.55);
             hbox.append(&arrow);
         } else {
-            let img = gtk::Image::from_icon_name("text-x-markdown-symbolic");
+            // text-x-markdown-symbolic 在 Adwaita 中不存在（会渲染成缺失占位），改用通用文件图标
+            let img = gtk::Image::from_icon_name("text-x-generic-symbolic");
             img.set_pixel_size(14);
             img.set_opacity(0.75);
             hbox.append(&img);
