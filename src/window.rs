@@ -418,8 +418,7 @@ $$
                 *self.state.current_headings.borrow_mut() = headings.clone();
                 self.sidebar.set_outline(&headings);
 
-                let outline_json =
-                    serde_json::to_string(&headings).unwrap_or_else(|_| "[]".into());
+                let outline_json = serde_json::to_string(&headings).unwrap_or_else(|_| "[]".into());
                 self.viewer.render_markdown(&text, &outline_json);
 
                 {

@@ -228,7 +228,10 @@ mod tests {
         assert!(saved.get(), "on_saved was not called for a valid file");
         assert!(!errored.get(), "on_save_error fired on the success path");
         let written = std::fs::read_to_string(&file).unwrap();
-        assert!(written.contains("edited body"), "content not written: {written}");
+        assert!(
+            written.contains("edited body"),
+            "content not written: {written}"
+        );
 
         let _ = std::fs::remove_dir_all(&dir);
     }

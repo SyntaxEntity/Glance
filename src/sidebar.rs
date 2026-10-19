@@ -1,6 +1,6 @@
 use crate::outline::Heading;
-use gtk::prelude::*;
 use gtk::pango;
+use gtk::prelude::*;
 use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
@@ -151,7 +151,8 @@ impl Sidebar {
         match dir {
             Some(d) => {
                 self.path_label.set_text(&d.display().to_string());
-                self.path_label.set_tooltip_text(Some(&d.display().to_string()));
+                self.path_label
+                    .set_tooltip_text(Some(&d.display().to_string()));
             }
             None => {
                 self.path_label.set_text("未设置工作目录");

@@ -115,7 +115,9 @@ impl Viewer {
             let outline_arg = outline.clone();
             let outline_js =
                 serde_json::to_string(&outline_arg).unwrap_or_else(|_| "\"[]\"".into());
-            let js = format!("window.__pending_md = {md_json}; window.__pending_outline = {outline_js};");
+            let js = format!(
+                "window.__pending_md = {md_json}; window.__pending_outline = {outline_js};"
+            );
             self.eval_js(&js);
             return;
         }
