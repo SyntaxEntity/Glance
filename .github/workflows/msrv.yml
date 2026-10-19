@@ -1,0 +1,56 @@
+name: msrv
+
+# MSRV 钉住（裁定 D-22）
+#
+# 目的：README 徽章与 Cargo.toml 声明的是 "Rust 1.92+"→「1.94+」。
+# 本 workflow 用 Fedora 44 容器 + 1.94.0 真构建一次，让声明不会随依赖升级悄悄漂移。
+#
+# 为什么必须在容器里：本项目依赖 GTK 4.22 / libadwaita 1.9 / WebKitGTK 6.0 /
+# GtkSourceView 5.18，Ubuntu 镜像自带的版本过旧（与 build.yml 同因）。
+#
+# 与 build.yml 的分工：build.yml 只在打 tag 时跑、产出四个发行包；
+# 本文件在每次推送时跑、只验证「1.94 能不能编」。
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'src/**'
+      - 'resources/**'
+      - 'data/**'
+      - '.github/workflows/msrv.yml'
+  workflow_dispatch:
+
+env:
+  MSRV: "1.94.0"
+
+jobs:
+  msrv:
+    name: build at MSRV (Fedora 44)
+    runs-on: ubuntu-24.04
+    container: registry.fedoraproject.org/fedora:44
+    steps:
+      - name: Prepare container
+        run: |
+          dnf install -y --setopt=install_weak_deps=False \
+            git ca-certificates curl \
+            gcc make \
+            gtk4-devel libadwaita-devel webkitgtk6.0-devel gtksourceview5-devel \
+            glib2-devel cairo-devel pango-devel gdk-pixbuf2-devel graphene-devel \
+            pkgconf-pkg-config
+
+      - uses: actions/checkout@v4
+
+      - name: Install Rust ${{ env.MSRV }}
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+            | sh -s -- -y --profile minimal --default-toolchain "$MSRV" --no-modify-path
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: rustc 版本自证
+        run: rustc --version
+
+      - name: cargo build (locked, 以 MSRV)
+        run: cargo build --locked
