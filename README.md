@@ -1,6 +1,6 @@
 # Glance
 
-![Rust](https://img.shields.io/badge/Rust-1.92%2B-blue?style=for-the-badge&logo=rust)
+![Rust](https://img.shields.io/badge/Rust-1.94%2B-blue?style=for-the-badge&logo=rust)
 ![GTK](https://img.shields.io/badge/GTK-4-blue?style=for-the-badge&logo=gnome)
 ![license](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 ![DeepSeek Assisted Development](https://img.shields.io/badge/DeepSeek%20Assisted-Development-brightgreen?style=for-the-badge&logo=deepseek)
