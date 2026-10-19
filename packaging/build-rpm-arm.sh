@@ -4,7 +4,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 IMAGE="${IMAGE:-fedora:44}"
-OUT="$ROOT/packaging/arm-rpm"
+OUT="$ROOT/target/packaging/arm-rpm"
 mkdir -p "$OUT"
 
 echo "==> Pulling $IMAGE (aarch64)"
@@ -32,7 +32,7 @@ podman run --rm --arch=arm64 \
     cp -a /src /tmp/glance-src
     chmod -R u+w /tmp/glance-src
     cd /tmp/glance-src
-    rm -rf target packaging/rpmbuild packaging/deb packaging/arm-rpm .git .mimocode .idea 2>/dev/null || true
+    rm -rf target .git .mimocode .idea 2>/dev/null || true
 
     VERSION="$(sed -n "s/^version = \"\(.*\)\"/\1/p" Cargo.toml | head -1)"
     NAME=glance
@@ -47,8 +47,7 @@ podman run --rm --arch=arm64 \
     echo "==> Staging ${NAME}-${VERSION}"
     mkdir -p "$STAGE"
     rsync -a --exclude target --exclude vendor --exclude .git \
-      --exclude .mimocode --exclude "packaging/rpmbuild" \
-      --exclude "packaging/deb" --exclude "packaging/arm-rpm" \
+      --exclude .mimocode \
       /tmp/glance-src/ "$STAGE/"
 
     echo "==> Vendoring crates"

@@ -86,7 +86,8 @@ jobs:
 
       - name: Show artifacts
         run: |
-          find packaging/rpmbuild/RPMS packaging/deb -name '*.rpm' -o -name '*.deb' | sort
+          find target/packaging/rpmbuild/RPMS target/packaging/deb \
+            -name '*.rpm' -o -name '*.deb' | sort
 
       - uses: actions/upload-artifact@v4
         with:
@@ -94,9 +95,9 @@ jobs:
           # 只传最终发行包；debuginfo / debugsource 不进 Release
           # （v0.1.1 / v0.1.2 的 Release 一直只有 4 个包，保持一致）
           path: |
-            packaging/rpmbuild/RPMS/**/*.rpm
-            packaging/deb/*.deb
-            !packaging/rpmbuild/RPMS/**/glance-debug*.rpm
+            target/packaging/rpmbuild/RPMS/**/*.rpm
+            target/packaging/deb/*.deb
+            !target/packaging/rpmbuild/RPMS/**/glance-debug*.rpm
           if-no-files-found: error
 
   release:

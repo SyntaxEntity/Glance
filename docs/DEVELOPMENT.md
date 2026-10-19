@@ -40,22 +40,18 @@ sudo dnf install rpm-build rpmdevtools gcc gtk4-devel libadwaita-devel \
 
 ```bash
 ./packaging/build-rpm.sh
-# 产物在 packaging/rpmbuild/RPMS/x86_64/
+# 产物在 target/packaging/rpmbuild/RPMS/x86_64/
 ```
 
-> 若 `/var/tmp` 不可写（容器、只读挂载环境），rpmbuild 会因无法创建 `%_tmppath` 而失败。换一个可写的临时目录：
->
-> ```bash
-> rpmbuild --define "_topdir $PWD/packaging/rpmbuild" \
->          --define "_tmppath $PWD/packaging/rpmbuild/tmp" \
->          --nodeps -ba packaging/rpmbuild/SPECS/glance.spec
-> ```
+> 构建产物统一落在 `target/packaging/`（随 `/target` 一起被 gitignore），源码树 `packaging/` 只放脚本与 spec。
+> 脚本已把 rpmbuild 的 `%_tmppath` 指向 `target/packaging/rpmbuild/tmp`，因此**不依赖宿主 `/var/tmp`**，
+> 在容器或只读挂载环境里也能直接跑。
 
 ### 2.2 aarch64 RPM
 
 ```bash
 ./packaging/build-rpm-arm.sh
-# 产物在 packaging/arm-rpm/
+# 产物在 target/packaging/arm-rpm/
 
 # 换基础镜像：
 IMAGE=fedora:45 ./packaging/build-rpm-arm.sh
@@ -74,7 +70,7 @@ IMAGE=fedora:45 ./packaging/build-rpm-arm.sh
 
 ```bash
 mkdir -p /tmp/arm-deb-extract && cd /tmp/arm-deb-extract
-rpm2cpio /path/to/glance-*-aarch64.rpm | cpio -id
+rpm2cpio "$OLDPWD/target/packaging/arm-rpm/glance-0.1.2-1.fc44.aarch64.rpm" | cpio -id
 cd - && ./packaging/build-deb.sh arm64 /tmp/arm-deb-extract/usr/bin/glance
 ```
 
@@ -116,7 +112,7 @@ gh release upload v0.1.x <packages...> --clobber
 1. **本机 git 远程当前不可用** —— SSH 报 `Bad owner or permissions on /etc/ssh/ssh_config.d/20-systemd-ssh-proxy.conf`，实测 `/etc/ssh/ssh_config.d/` 属主为 `nobody:nobody` 而非 `root:root`（2026-10-17 复核）。**不要自行发明绕行方案**（如 `ssh -F /dev/null`），需 root 修复，**上报 Atlas**。
 2. **推送邮箱隐私保护**：author **和** committer 必须是 `SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com>`，否则 GH007 拒绝推送。
 3. **依赖版本偏新**：Debian / Ubuntu 稳定版可能不满足 GTK 4.22 / libadwaita 1.9 / WebKitGTK 6.0 / GtkSourceView 5.18。DEB 的 `Depends` 按 Debian sid / Ubuntu 25.04+ 的包名写。
-4. **打包产物均已在 `.gitignore`**：`packaging/rpmbuild/`、`packaging/deb/`、`packaging/arm-rpm/`。发布用的二进制**不进仓库**，只挂 release。
+4. **打包产物统一在 `target/packaging/`**（`rpmbuild/`、`deb/`、`arm-rpm/`，随 `/target` 被 gitignore）。源码树 `packaging/` 只放脚本与 spec。发布用的二进制**不进仓库**，只挂 release。
 5. **CI 已就绪**：`.github/workflows/build.yml` —— tag `v*` 触发，x86_64 与 aarch64 各自在 Fedora 44 容器内构建四包并挂 Release。aarch64 用原生 `ubuntu-24.04-arm` runner，**无需 qemu**；本机 `build-rpm-arm.sh` 保留作为离线兜底。普通提交与 PR 不触发测试。
 6. **maintainer 身份已统一**：全部使用 `SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com>`，与 git 提交身份一致。
    - `packaging/glance.spec` 的 `%changelog`、`packaging/build-deb.sh` 生成的 `DEBIAN/control` 的 `Maintainer` 字段

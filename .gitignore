@@ -4,9 +4,8 @@
 *.png
 !data/icons/**/*.png
 .idea/
-packaging/rpmbuild/
-packaging/deb/
-packaging/arm-rpm/
+# 打包产物已统一放到 target/packaging/（由上面的 /target 覆盖），
+# 源码树 packaging/ 只保留脚本与 spec。
 
 # ---- 内部协作产物：含基础设施信息，禁止入库（Atlas 规范 §6.3）----
 /AGENT-REPORT*.md

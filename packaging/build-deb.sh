@@ -3,7 +3,7 @@
 # Usage: build-deb.sh [ARCH] [BINARY]
 #   ARCH   — Debian arch (amd64 | arm64), default amd64
 #   BINARY — path to prebuilt glance, default target/release/glance
-# Produces packaging/deb/glance_<version>-1_<arch>.deb
+# Produces target/packaging/deb/glance_<version>-1_<arch>.deb
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -12,7 +12,8 @@ NAME=glance
 ARCH="${1:-amd64}"
 BIN="${2:-$ROOT/target/release/glance}"
 DEB_VER="${VERSION}-1"
-OUT_DIR="$ROOT/packaging/deb"
+# 构建产物统一放 target/packaging/（已在 .gitignore 的 /target 内）
+OUT_DIR="$ROOT/target/packaging/deb"
 STAGE="$OUT_DIR/${NAME}_${DEB_VER}_${ARCH}"
 DEB_FILE="$OUT_DIR/${NAME}_${DEB_VER}_${ARCH}.deb"
 
