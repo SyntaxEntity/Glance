@@ -11,6 +11,11 @@ pub enum TreeItem {
     File { path: PathBuf, name: String },
 }
 
+/// 打开文件的回调；抽别名以简化字段签名（clippy::type_complexity）。
+type OpenFileCallback = Box<dyn Fn(PathBuf)>;
+/// 大纲跳转的回调；理由同上。
+type OutlineJumpCallback = Box<dyn Fn(Heading)>;
+
 pub struct Sidebar {
     pub root: gtk::Box,
     stack: gtk::Stack,
@@ -18,8 +23,8 @@ pub struct Sidebar {
     outline_list: gtk::ListBox,
     path_label: gtk::Label,
     workdir: RefCell<Option<PathBuf>>,
-    on_open_file: RefCell<Option<Box<dyn Fn(PathBuf)>>>,
-    on_outline_jump: RefCell<Option<Box<dyn Fn(Heading)>>>,
+    on_open_file: RefCell<Option<OpenFileCallback>>,
+    on_outline_jump: RefCell<Option<OutlineJumpCallback>>,
     expanded: RefCell<Vec<PathBuf>>,
     headings: RefCell<Vec<Heading>>,
 }
@@ -317,8 +322,8 @@ fn collect_level(dir: &Path, sidebar: &Sidebar, out: &mut Vec<TreeItem>) {
         }
     }
 
-    dirs.sort_by(|a, b| a.1.to_lowercase().cmp(&b.1.to_lowercase()));
-    files.sort_by(|a, b| a.1.to_lowercase().cmp(&b.1.to_lowercase()));
+    dirs.sort_by_key(|a| a.1.to_lowercase());
+    files.sort_by_key(|a| a.1.to_lowercase());
 
     for (path, name) in dirs {
         let expanded = sidebar.is_expanded(&path);

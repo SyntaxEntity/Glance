@@ -33,7 +33,7 @@ pub fn on_activate(app: &adw::Application) {
 }
 
 pub fn on_open(app: &adw::Application, files: &[gtk::gio::File], _hint: &str) {
-    let first = files.first().and_then(|f| f.path()).map(PathBuf::from);
+    let first = files.first().and_then(|f| f.path());
     open_window(app, first);
 }
 
@@ -219,7 +219,6 @@ fn open_window(app: &adw::Application, initial: Option<PathBuf>) {
             dialog.select_folder(Some(&parent), gtk::gio::Cancellable::NONE, move |res| {
                 if let Ok(folder) = res {
                     if let Some(path) = folder.path() {
-                        let path = PathBuf::from(path);
                         ui2.sidebar.set_workdir(Some(path.clone()));
                         ui2.state.cfg.borrow_mut().workdir = Some(path);
                         ui2.persist_config();
@@ -249,7 +248,7 @@ fn open_window(app: &adw::Application, initial: Option<PathBuf>) {
             dialog.open(Some(&parent), gtk::gio::Cancellable::NONE, move |res| {
                 if let Ok(file) = res {
                     if let Some(path) = file.path() {
-                        ui2.open_file(PathBuf::from(path));
+                        ui2.open_file(path);
                     }
                 }
             });

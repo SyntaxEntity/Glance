@@ -4,6 +4,9 @@ use std::cell::RefCell;
 use std::path::PathBuf;
 use std::rc::Rc;
 
+/// 保存失败回调。抽成别名既让字段签名可读，也满足 clippy 的复杂度要求。
+type SaveErrorCallback = Box<dyn Fn(&str)>;
+
 pub struct Editor {
     pub root: gtk::Box,
     view: sourceview5::View,
@@ -11,7 +14,7 @@ pub struct Editor {
     file: RefCell<Option<PathBuf>>,
     dirty: RefCell<bool>,
     on_saved: RefCell<Option<Box<dyn Fn()>>>,
-    on_save_error: RefCell<Option<Box<dyn Fn(&str)>>>,
+    on_save_error: RefCell<Option<SaveErrorCallback>>,
 }
 
 impl Editor {
