@@ -87,7 +87,11 @@ impl Viewer {
         let settings = gtk::PrintSettings::new();
         settings.set(gtk::PRINT_SETTINGS_OUTPUT_URI, Some(uri.as_str()));
         settings.set(gtk::PRINT_SETTINGS_OUTPUT_FILE_FORMAT, Some("pdf"));
-        settings.set_printer("Print to File");
+        // GTK 的「打印到文件」虚拟打印机名是**本地化**的（zh_CN 下是「打印到文件」），
+        // 硬编码 "Print to File" 会让 PrintSettings 找不到打印机，导出报「找不到打印机」。
+        // 用 GTK 自己的 gettext 域（gtk40）取当前语言下的名字。
+        let printer = glib::dgettext(Some("gtk40"), "Print to File");
+        settings.set_printer(&printer);
         let op = webkit6::PrintOperation::new(&self.webview);
         op.set_print_settings(&settings);
         op
