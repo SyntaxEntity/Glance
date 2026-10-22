@@ -7,7 +7,7 @@
 
 低饱和护眼的 **Markdown + LaTeX** 阅读器，面向 GNOME / Linux 桌面的长文阅读场景。公式字体本地打包，完全离线；默认只读预览，需要时才进入编辑。
 
-> 版本 `0.1.2` ｜ 状态：开发中 ｜ 已知限制见 [已知限制](#已知限制)
+> 版本 `0.1.3` ｜ 状态：开发中 ｜ 已知限制见 [已知限制](#已知限制)
 
 ## 功能
 
@@ -25,17 +25,17 @@
 
 | 发行版 | 架构 | 文件 |
 |---|---|---|
-| Fedora / RHEL 系 | x86_64 | `glance-0.1.2-1.fc44.x86_64.rpm` |
-| Fedora / RHEL 系 | aarch64 | `glance-0.1.2-1.fc44.aarch64.rpm` |
-| Debian / Ubuntu 系 | amd64 | `glance_0.1.2-1_amd64.deb` |
-| Debian / Ubuntu 系 | arm64 | `glance_0.1.2-1_arm64.deb` |
+| Fedora / RHEL 系 | x86_64 | `glance-0.1.3-1.fc44.x86_64.rpm` |
+| Fedora / RHEL 系 | aarch64 | `glance-0.1.3-1.fc44.aarch64.rpm` |
+| Debian / Ubuntu 系 | amd64 | `glance_0.1.3-1_amd64.deb` |
+| Debian / Ubuntu 系 | arm64 | `glance_0.1.3-1_arm64.deb` |
 
 ```bash
 # Fedora / RHEL 系
-sudo dnf install ./glance-0.1.2-1.fc44.x86_64.rpm
+sudo dnf install ./glance-0.1.3-1.fc44.x86_64.rpm
 
 # Debian / Ubuntu 系
-sudo apt install ./glance_0.1.2-1_amd64.deb
+sudo apt install ./glance_0.1.3-1_amd64.deb
 ```
 
 安装后可从桌面菜单启动，或直接执行 `glance`。
