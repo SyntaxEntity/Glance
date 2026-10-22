@@ -70,7 +70,7 @@ IMAGE=fedora:45 ./packaging/build-rpm-arm.sh
 
 ```bash
 mkdir -p /tmp/arm-deb-extract && cd /tmp/arm-deb-extract
-rpm2cpio "$OLDPWD/target/packaging/arm-rpm/glance-0.1.3-1.fc44.aarch64.rpm" | cpio -id
+rpm2cpio "$OLDPWD/target/packaging/arm-rpm/glance-0.1.4-1.fc44.aarch64.rpm" | cpio -id
 cd - && ./packaging/build-deb.sh arm64 /tmp/arm-deb-extract/usr/bin/glance
 ```
 

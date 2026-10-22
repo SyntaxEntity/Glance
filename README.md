@@ -7,7 +7,7 @@
 
 低饱和护眼的 **Markdown + LaTeX** 阅读器，面向 GNOME / Linux 桌面的长文阅读场景。公式字体本地打包，完全离线；默认只读预览，需要时才进入编辑。
 
-> 版本 `0.1.3` ｜ 状态：开发中 ｜ 已知限制见 [已知限制](#已知限制)
+> 版本 `0.1.4` ｜ 状态：开发中 ｜ 已知限制见 [已知限制](#已知限制)
 
 ## 功能
 
@@ -25,17 +25,17 @@
 
 | 发行版 | 架构 | 文件 |
 |---|---|---|
-| Fedora / RHEL 系 | x86_64 | `glance-0.1.3-1.fc44.x86_64.rpm` |
-| Fedora / RHEL 系 | aarch64 | `glance-0.1.3-1.fc44.aarch64.rpm` |
-| Debian / Ubuntu 系 | amd64 | `glance_0.1.3-1_amd64.deb` |
-| Debian / Ubuntu 系 | arm64 | `glance_0.1.3-1_arm64.deb` |
+| Fedora / RHEL 系 | x86_64 | `glance-0.1.4-1.fc44.x86_64.rpm` |
+| Fedora / RHEL 系 | aarch64 | `glance-0.1.4-1.fc44.aarch64.rpm` |
+| Debian / Ubuntu 系 | amd64 | `glance_0.1.4-1_amd64.deb` |
+| Debian / Ubuntu 系 | arm64 | `glance_0.1.4-1_arm64.deb` |
 
 ```bash
 # Fedora / RHEL 系
-sudo dnf install ./glance-0.1.3-1.fc44.x86_64.rpm
+sudo dnf install ./glance-0.1.4-1.fc44.x86_64.rpm
 
 # Debian / Ubuntu 系
-sudo apt install ./glance_0.1.3-1_amd64.deb
+sudo apt install ./glance_0.1.4-1_amd64.deb
 ```
 
 安装后可从桌面菜单启动，或直接执行 `glance`。
@@ -143,7 +143,7 @@ packaging/       RPM / DEB 打包脚本
 - **依赖版本偏新**：需要 GTK 4.22 / libadwaita 1.9 / WebKitGTK 6.0 / GtkSourceView 5.18。Debian / Ubuntu 稳定版的库版本可能偏旧，装包前请先确认。
 - **未验证**：Windows / macOS 未构建、未运行（依赖 GTK 与 WebKitGTK，无支持计划）。
 - **未验证**：当前环境无法启动真实 GUI 会话，界面交互、快捷键与视觉效果未经真机操作验证；单元测试在无头 Broadway 后端下通过。
-- **未验证**：PDF 导出代码路径完整，但未实际打开生成的 PDF 检查排版与分页效果。
+- **PDF 排版未调优**：导出已验证可用（A4、字体已内嵌），但预览样式没有 `@media print`，PDF 会带暖纸色背景，代码块与公式可能跨页断开。
 - **功能缺口**：HTML 导出尚未实现（见[路线图](#路线图)）。
 - **CI 只在 tag 时构建**：推送 `v*` tag 会触发 GitHub Actions 构建四个包并挂到 Release；普通提交与 PR **不会**触发测试。
 - **依赖外部服务**：README 的 DeepSeek 徽章图片依赖 shields.io，离线环境不显示。这不影响应用本身的离线特性。
