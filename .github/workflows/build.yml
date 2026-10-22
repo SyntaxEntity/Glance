@@ -112,7 +112,7 @@ jobs:
           merge-multiple: true
 
       - name: List artifacts
-        run: ls -lh dist
+        run: find dist -type f | sort
 
       - name: Upload to GitHub Release
         env:
@@ -125,4 +125,8 @@ jobs:
             gh release create "${GITHUB_REF_NAME}" \
               --title "${GITHUB_REF_NAME}" \
               --notes "Release ${GITHUB_REF_NAME}"
-          gh release upload "${GITHUB_REF_NAME}" dist/* --clobber
+          # download-artifact 会保留 artifact 内的子目录（deb/、rpmbuild/），
+          # 不能直接用 dist/*：gh 会把目录当文件上传，报
+          # "read dist/deb: is a directory"（v0.1.4 首发即踩此坑）。
+          find dist -type f \( -name '*.rpm' -o -name '*.deb' \) -print0 |
+            xargs -0 gh release upload "${GITHUB_REF_NAME}" --clobber
