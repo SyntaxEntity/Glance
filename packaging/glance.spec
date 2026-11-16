@@ -9,7 +9,7 @@
 #     glib2-devel cairo-devel pango-devel gdk-pixbuf2-devel graphene-devel
 
 Name:           glance
-Version:        0.1.4
+Version:        0.1.5
 Release:        1%{?dist}
 Summary:        Calm Markdown and LaTeX reader for GNOME
 License:        MIT
@@ -82,6 +82,11 @@ install -Dpm 0644 THIRD_PARTY.md %{buildroot}%{_docdir}/%{name}/THIRD_PARTY.md
 %{_datadir}/icons/hicolor/*/apps/glance.png
 
 %changelog
+* Tue Nov 17 2026 SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com> - 0.1.5-1
+- CI only: the release job now attaches all four packages on tag builds
+  (explicit repository for `gh`, and only files are uploaded — no directories)
+- No user-facing changes in this release
+
 * Thu Oct 22 2026 SyntaxEntity <265272538+SyntaxEntity@users.noreply.github.com> - 0.1.4-1
 - Fix PDF export failing with "printer not found" in localized environments
 
